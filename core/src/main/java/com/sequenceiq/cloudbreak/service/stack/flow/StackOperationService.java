@@ -39,6 +39,7 @@ import com.sequenceiq.cloudbreak.common.exception.BadRequestException;
 import com.sequenceiq.cloudbreak.common.service.TransactionService;
 import com.sequenceiq.cloudbreak.common.service.TransactionService.TransactionExecutionException;
 import com.sequenceiq.cloudbreak.common.service.TransactionService.TransactionRuntimeExecutionException;
+import com.sequenceiq.cloudbreak.core.bootstrap.service.ClusterBootstrapper;
 import com.sequenceiq.cloudbreak.core.flow2.service.ReactorFlowManager;
 import com.sequenceiq.cloudbreak.domain.StopRestrictionReason;
 import com.sequenceiq.cloudbreak.domain.stack.Stack;
@@ -112,6 +113,9 @@ public class StackOperationService {
 
     @Inject
     private TargetedUpscaleSupportService targetedUpscaleSupportService;
+
+    @Inject
+    private ClusterBootstrapper clusterBootstrapper;
 
     public FlowIdentifier removeInstance(Stack stack, String instanceId, boolean forced) {
         InstanceMetaData metaData = updateNodeCountValidator.validateInstanceForDownscale(instanceId, stack);
@@ -440,5 +444,11 @@ public class StackOperationService {
     public FlowIdentifier reRegisterClusterProxyConfig(@NotNull NameOrCrn nameOrCrn, Long workspaceId) {
         Stack stack = stackService.getNotTerminatedByCrnInWorkspace(nameOrCrn.getCrn(), workspaceId);
         return flowManager.triggerClusterProxyConfigReRegistration(stack.getId());
+    }
+
+    public FlowIdentifier rotateSaltPassword(@NotNull NameOrCrn nameOrCrn, Long workspaceId) {
+        Stack stack = stackService.getByNameOrCrnAndWorkspaceIdWithLists(nameOrCrn, workspaceId);
+        clusterBootstrapper.validateRotateSaltPassword(stack);
+        return flowManager.triggerRotateSaltPassword(stack.getId());
     }
 }
