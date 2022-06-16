@@ -54,6 +54,8 @@ public class FlowChainTriggers {
 
     public static final String DATALAKE_DATABASE_BACKUP_CHAIN_TRIGGER_EVENT = "DATALAKE_DATABASE_BACKUP_CHAIN_TRIGGER_EVENT";
 
+    public static final String CHECK_ATLAS_UPDATED_CHAIN_TRIGGER_EVENT = "CHECK_ATLAS_UPDATED_CHAIN_TRIGGER_EVENT";
+
     private FlowChainTriggers() {
     }
 }

@@ -441,4 +441,9 @@ public class StackOperationService {
         Stack stack = stackService.getNotTerminatedByCrnInWorkspace(nameOrCrn.getCrn(), workspaceId);
         return flowManager.triggerClusterProxyConfigReRegistration(stack.getId());
     }
+
+    public FlowIdentifier checkAtlasUpdated(@NotNull NameOrCrn nameOrCrn, Long workspaceId) {
+        Stack stack = stackService.getNotTerminatedByCrnInWorkspace(nameOrCrn.getCrn(), workspaceId);
+        return flowManager.triggerCheckAtlasUpdated(stack.getId());
+    }
 }
